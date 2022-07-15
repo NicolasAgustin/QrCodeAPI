@@ -1,19 +1,26 @@
-import json
+from flask import Flask, jsonify, request
+from modules.qr_generator import generate_qr, decode_qr
 
-from flask import Flask
 
 app = Flask(__name__)
 
 
-@app.route('/')
-def index():
-    print('hola')
-    return json.dumps(
-        {
-            'name': 'nico',
-            'email': 'nico@gmail.com'
-        }
-    )
+@app.route('/encode/<text>', methods=['GET'])
+def encode(text: str):
+    return generate_qr(text)
+
+
+@app.route('/decode', methods=['POST'])
+def decode():
+    return decode_qr(request.data)
+
+
+@app.errorhandler(Exception)
+def handle_exception(e: Exception):
+    return jsonify({
+        'code': 200,
+        'description': str(e)
+    })
 
 
 if __name__ == '__main__':
