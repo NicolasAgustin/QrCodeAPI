@@ -3,6 +3,7 @@ import jwt
 from flask import jsonify, request
 from flask import current_app
 from functools import wraps
+from modules.mongo import Mongo
 
 
 def token_required(f):
@@ -24,8 +25,14 @@ def token_required(f):
                 algorithms=['HS256']
             )
 
-            # Hay que chequear el contenido del token
-            if data['user'] != 'qrcode1' and data['password'] != 'pass123':
+            DATABASE: Mongo = current_app.config['DATABASE']
+
+            validated = DATABASE.get_user_by_pass_email(
+                data['password'],
+                data['user']
+            )
+
+            if not validated:
                 return jsonify({
                     "message": "Invalid Authentication token!",
                     "data": None,
