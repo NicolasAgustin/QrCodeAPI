@@ -42,6 +42,7 @@ def encode(text: str):
 def encode_json():
     try:
         data = request.json
+        # Generate qr based on data received
         return generate_qr(data)
     except Exception as e:
         return jsonify({
