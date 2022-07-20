@@ -3,7 +3,7 @@ import jwt
 from flask import Flask, jsonify, request
 from datetime import datetime, timezone, timedelta
 from decouple import config
-from modules.mongo import Mongo
+from modules.Mongo import Mongo
 from modules.qr_generator import generate_qr, decode_qr
 from modules.auth_middleware import token_required
 
