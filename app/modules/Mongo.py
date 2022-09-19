@@ -4,9 +4,7 @@ from pymongo.mongo_client import MongoClient
 class Mongo():
 
     def __init__(this, db_port: str, db_ip: str, db_name: str):
-        this.string_connection = (
-            f'mongodb://{db_ip}:{db_port}'
-        )
+        this.string_connection = db_ip
         this.client = MongoClient(this.string_connection)
         this.db = this.client.get_database(db_name)
 

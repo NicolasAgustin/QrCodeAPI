@@ -3,7 +3,7 @@ import jwt
 from flask import jsonify, request
 from flask import current_app
 from functools import wraps
-from modules.mongo import Mongo
+from modules.Mongo import Mongo
 
 
 def token_required(f):

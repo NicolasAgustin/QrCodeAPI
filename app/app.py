@@ -1,3 +1,4 @@
+import os
 import jwt
 
 from flask import Flask, jsonify, request
@@ -7,22 +8,30 @@ from modules.Mongo import Mongo
 from modules.qr_generator import generate_qr, decode_qr
 from modules.auth_middleware import token_required
 
+import debugpy
 
 app = Flask(__name__)
 
 with app.app_context():
-    app.config['SECRET_KEY'] = config('SECRET_KEY')
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
+    if os.getenv('DEBUG') == 'true':
+        debugpy.listen(("0.0.0.0", 3002))
+        print('Waiting for debugger to attach...')
+        debugpy.wait_for_client()
+
     DATABASE = Mongo(
-        config('DB_PORT'),
-        config('DB_IP'),
-        config('DB_NAME')
+        os.getenv('DB_PORT'),
+        os.getenv('DB_IP'),
+        os.getenv('DB_NAME')
     )
     app.config['DATABASE'] = DATABASE
-
 
 @app.route('/encode/<text>', methods=['GET'])
 @token_required
 def encode(text: str):
+    if os.getenv('DEBUG') == 'true':
+        debugpy.breakpoint()
     try:
         return generate_qr({
             'text': text,
@@ -116,4 +125,4 @@ def handle_exception(e: Exception):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5000, debug=True)

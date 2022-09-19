@@ -1,0 +1,20 @@
+# Mantainer: Nicolas Sandez
+
+version: '3'
+services:
+  api:
+    build: .
+    environment:
+      - DEBUG=true
+      - SHELL=/bin/bash
+      - COMMAND=init
+      - SECRET_KEY=test123
+      - DB_PORT=27017
+      - DB_IP=mongodb+srv://root:root@cluster0.ded2q.mongodb.net/?retryWrites=true&w=majority
+      - DB_NAME=api
+    ports:
+      - "3002:3002" # Debugpy if Debug=true | Matching the .vscode launch "debugServer": 3002 
+      - "5000:5000"
+    tty: true
+    volumes:
+      - ./app:/app
