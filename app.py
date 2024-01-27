@@ -99,10 +99,10 @@ def auth():
             'data': token
         }), 200
 
-    except Exception as e:
+    except Exception as ex:
         return jsonify({
             "message": "Something went wrong!",
-            "error": str(e),
+            "error": str(ex),
             "data": None
         }), 500
 
